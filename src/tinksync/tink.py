@@ -22,16 +22,16 @@ def _debug(response):
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 
 
-def _fetch_user_create_token():
+def _fetch_user_create_token(debug=False):
     """Step 1.1 in the Tink documentation."""
     url = "https://api.tink.com/api/v1/oauth/token"
     data = {"client_id": TINK_CLIENT_ID, "client_secret": TINK_CLIENT_SECRET, "grant_type": "client_credentials", "scope": "user:create"}
     response = requests.post(url, data=data)
-    _debug(response)
+    _debug(response) if debug else None
     return response.json()["access_token"]
 
 
-def create_user(username):
+def create_user(username, debug=False):
     """Step 1.2 in the Tink documentation.
 
     This function creates a Tink user with the given username.
@@ -41,11 +41,11 @@ def create_user(username):
     data = {"external_user_id": username, "market": "GB", "locale": "en_US"}
     headers = {"Authorization": f"Bearer {_fetch_user_create_token()}", "Content-Type": "application/json"}
     response = requests.post(url, data=json.dumps(data), headers=headers)
-    _debug(response)
+    _debug(response) if debug else None
     return response.json()
 
 
-def _fetch_user_grant_token():
+def _fetch_user_grant_token(debug=False):
     """Step 2.1 in the Tink documentation."""
     url = "https://api.tink.com/api/v1/oauth/token"
     data = {
@@ -55,11 +55,11 @@ def _fetch_user_grant_token():
         "scope": "authorization:grant",
     }
     response = requests.post(url, data=data)
-    _debug(response)
+    _debug(response) if debug else None
     return response.json()["access_token"]
 
 
-def _fetch_authorization_code(username):
+def _fetch_authorization_code(username, debug=False):
     """Step 2.2 in the Tink documentation."""
     url = "https://api.tink.com/api/v1/oauth/authorization-grant/delegate"
     data = {
@@ -70,11 +70,11 @@ def _fetch_authorization_code(username):
     }
     headers = {"Authorization": f"Bearer {_fetch_user_grant_token()}"}
     response = requests.post(url, data=data, headers=headers)
-    _debug(response)
+    _debug(response) if debug else None
     return response.json()["code"]
 
 
-def make_connect_bank_url(username):
+def make_connect_bank_url(username, debug=False):
     """Step 3 in the Tink documentation.
 
     This function returns a URL that the user should be redirected to.
@@ -85,17 +85,17 @@ def make_connect_bank_url(username):
     return url
 
 
-def _fetch_user_auth_token(username):
+def _fetch_user_auth_token(username, debug=False):
     """Step 4.1 in the Tink documentation."""
     url = "https://api.tink.com/api/v1/oauth/authorization-grant"
     data = {"external_user_id": username, "scope": "accounts:read,balances:read,transactions:read,provider-consents:read"}
     headers = {"Authorization": f"Bearer {_fetch_user_grant_token()}"}
     response = requests.post(url, data=data, headers=headers)
-    _debug(response)
+    _debug(response) if debug else None
     return response.json()["code"]
 
 
-def _fetch_user_access_token(username):
+def _fetch_user_access_token(username, debug=False):
     """Step 4.2 in the Tink documentation."""
     url = "https://api.tink.com/api/v1/oauth/token"
     data = {
@@ -105,23 +105,23 @@ def _fetch_user_access_token(username):
         "code": _fetch_user_auth_token(username),
     }
     response = requests.post(url, data=data)
-    _debug(response)
+    _debug(response) if debug else None
     return response.json()["access_token"]
 
 
-def fetch_user_accounts(username):
+def fetch_user_accounts(username, debug=False):
     """Fetches the list of user accounts from the Tink API."""
     url = "https://api.tink.com/data/v2/accounts"
     headers = {"Authorization": f"Bearer {_fetch_user_access_token(username)}"}
     response = requests.get(url, headers=headers)
-    _debug(response)
+    _debug(response) if debug else None
     return json.dumps(response.json(), indent=2)
 
 
-def fetch_user_transactions(username):
+def fetch_user_transactions(username, debug=False):
     """Fetches the list of user transactions from the Tink API."""
     url = "https://api.tink.com/data/v2/transactions"
     headers = {"Authorization": f"Bearer {_fetch_user_access_token(username)}"}
     response = requests.get(url, headers=headers)
-    _debug(response)
+    _debug(response) if debug else None
     return json.dumps(response.json(), indent=2)

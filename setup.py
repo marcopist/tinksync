@@ -17,7 +17,7 @@ setup(
     license="MIT",
     description="Integrate Google Sheets with Money Dashboard",
     long_description="{}\n{}".format(
-        re.compile("^.. start-badges.*^.. end-badges", re.M | re.S).sub("", read("README.rst")),
+        re.compile("^.. start-badges.*^.. end-badges", re.M | re.S).sub("", read("README.md")),
         re.sub(":[a-z]+:`~?(.*?)`", r"``\1``", read("CHANGELOG.rst")),
     ),
     author="Marco Pistilli",
@@ -64,7 +64,9 @@ setup(
     install_requires=[
         "flask",
         "requests",
-        "gspread"
+        "gspread",
+        "python-dotenv",
+        "curlify"
     ],
     extras_require={
         # eg:
