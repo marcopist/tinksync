@@ -62,7 +62,8 @@ setup(
     ],
     python_requires=">=3.7",
     install_requires=[
-        "flask"
+        "flask",
+        "requests",
     ],
     extras_require={
         # eg:
