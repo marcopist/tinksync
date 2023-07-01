@@ -2,6 +2,8 @@
 
 This module implements the requests described in this document:
 https://docs.tink.com/resources/transactions/continuous-connect-to-a-bank-account
+
+scripts/cli.py is a CLI making use of these functions.
 """
 
 import os, requests, json
