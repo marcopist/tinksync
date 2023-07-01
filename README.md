@@ -40,3 +40,25 @@ python -m tinksync.cli --create
 ```
 
 Then, start connecting your banks.
+```
+python -m tinksync.cli --connect
+```
+
+This will produce a link as an output. Follow it, and follow the instructions to connect your first bank.
+
+Have more banks? That's perfect, that's why Tink (and this app) are made for you. Just re-run `python -m tinksync.cli --connect` and follow the instructions again to connect to another bank. (Do not reuse the same link as the first time). Repeat the operation as many times as you need to connect to all your bank accounts. Easy peasy :)
+
+### Check your integration
+
+Run the following command to see all the accounts you have successfully conntected.
+
+```
+python -m tinksync.cli --accounts
+```
+
+If you don't see one or a few, no worries. Just wait a few mins and retry, the connection might take a few minutes to be fully established. 
+
+To see your latest transactions (across all your accounts) run:
+```
+python -m tinksync.cli --transactions
+```

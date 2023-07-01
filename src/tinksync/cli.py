@@ -1,17 +1,38 @@
 """This module contains a CLI which can be used to create a Tink user, generate a bank connection URL, and fetch the accounts."""
+from dotenv import load_dotenv
+
+load_dotenv()
+
+from tinksync.tink import create_user, make_connect_bank_url, fetch_user_accounts, fetch_user_accounts, fetch_user_transactions
+from pprint import pprint
+
+def _format_accounts(data):
+    accounts = data["accounts"]
+    for account in accounts:
+        name = account["name"]
+        balance_val = account["balances"]["booked"]["amount"]["value"]
+        balance = float(balance_val["unscaledValue"]) / 10 ** int(balance_val["scale"])
+        currency = account["balances"]["booked"]["amount"]["currencyCode"]
+        print(f">> {name} > {balance} {currency} > OK")
+
+def _format_transactions(data):
+    transactions = data["transactions"]
+    for transaction in transactions:
+        amount_val = transaction["amount"]["value"]
+        amount = float(amount_val["unscaledValue"]) / 10 ** int(amount_val["scale"])
+        currency = transaction["amount"]["currencyCode"]
+        description = transaction["descriptions"]['display']
+        date = transaction["dates"]['booked']
+        print(f">> {description} > {date} > {amount} {currency} ")
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv
     import argparse, os
+
     # Exmaple usage:
     # python -m tinksync.cli --username <username> --create -> Will create a Tink user
     # python -m tinksync.cli --connect -> Will generate a bank connection URL
     # python -m tinksync.cli --accounts -> Will fetch the accounts for the user
     # python -m tinksync.cli --transactions -> Will fetch the transactions for the user
-
-    load_dotenv()
-
-    from tinksync.tink import create_user, make_connect_bank_url, fetch_user_accounts, fetch_user_accounts, fetch_user_transactions
 
     parser = argparse.ArgumentParser(description="Tinksync CLI")
     parser.add_argument("--username", type=str, help="The username to use", required=False)
@@ -23,13 +44,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     username = args.username or os.environ.get("TINK_USERNAME") or "myself"
-    debug_mode = True if os.environ.get("DEBUG_MODE") else False
+    debug_mode = True if os.environ.get("DEBUG_MODE") == 1 else False
 
     if args.create:
         print(create_user(username, debug=debug_mode))
     elif args.connect:
         print(make_connect_bank_url(username, debug=debug_mode))
     elif args.accounts:
-        print(fetch_user_accounts(username, debug=debug_mode))
+        _format_accounts(fetch_user_accounts(username, debug=debug_mode))
     elif args.transactions:
-        print(fetch_user_transactions(username, debug=debug_mode))
+        _format_transactions(fetch_user_transactions(username, debug=debug_mode))

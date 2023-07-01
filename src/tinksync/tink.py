@@ -11,6 +11,7 @@ import os, requests, json, curlify
 TINK_CLIENT_ID = os.environ.get("TINK_CLIENT_ID")
 TINK_CLIENT_SECRET = os.environ.get("TINK_CLIENT_SECRET")
 
+
 def _debug(response):
     """Prints the request and response for debugging purposes."""
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -115,7 +116,7 @@ def fetch_user_accounts(username, debug=False):
     headers = {"Authorization": f"Bearer {_fetch_user_access_token(username)}"}
     response = requests.get(url, headers=headers)
     _debug(response) if debug else None
-    return json.dumps(response.json(), indent=2)
+    return response.json()
 
 
 def fetch_user_transactions(username, debug=False):
@@ -124,4 +125,4 @@ def fetch_user_transactions(username, debug=False):
     headers = {"Authorization": f"Bearer {_fetch_user_access_token(username)}"}
     response = requests.get(url, headers=headers)
     _debug(response) if debug else None
-    return json.dumps(response.json(), indent=2)
+    return response.json()
