@@ -64,6 +64,7 @@ setup(
     install_requires=[
         "flask",
         "requests",
+        "gspread"
     ],
     extras_require={
         # eg:

@@ -6,10 +6,20 @@ https://docs.tink.com/resources/transactions/continuous-connect-to-a-bank-accoun
 scripts/cli.py is a CLI making use of these functions.
 """
 
-import os, requests, json
+import os, requests, json, curlify
 
 TINK_CLIENT_ID = os.environ.get("TINK_CLIENT_ID")
 TINK_CLIENT_SECRET = os.environ.get("TINK_CLIENT_SECRET")
+
+def _debug(response):
+    """Prints the request and response for debugging purposes."""
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print("--- Sent request ---")
+    print(curlify.to_curl(response.request))
+
+    print("--- Received response ---")
+    print(response.json())
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 
 
 def _fetch_user_create_token():
@@ -17,6 +27,7 @@ def _fetch_user_create_token():
     url = "https://api.tink.com/api/v1/oauth/token"
     data = {"client_id": TINK_CLIENT_ID, "client_secret": TINK_CLIENT_SECRET, "grant_type": "client_credentials", "scope": "user:create"}
     response = requests.post(url, data=data)
+    _debug(response)
     return response.json()["access_token"]
 
 
@@ -30,6 +41,7 @@ def create_user(username):
     data = {"external_user_id": username, "market": "GB", "locale": "en_US"}
     headers = {"Authorization": f"Bearer {_fetch_user_create_token()}", "Content-Type": "application/json"}
     response = requests.post(url, data=json.dumps(data), headers=headers)
+    _debug(response)
     return response.json()
 
 
@@ -43,6 +55,7 @@ def _fetch_user_grant_token():
         "scope": "authorization:grant",
     }
     response = requests.post(url, data=data)
+    _debug(response)
     return response.json()["access_token"]
 
 
@@ -57,6 +70,7 @@ def _fetch_authorization_code(username):
     }
     headers = {"Authorization": f"Bearer {_fetch_user_grant_token()}"}
     response = requests.post(url, data=data, headers=headers)
+    _debug(response)
     return response.json()["code"]
 
 
@@ -77,6 +91,7 @@ def _fetch_user_auth_token(username):
     data = {"external_user_id": username, "scope": "accounts:read,balances:read,transactions:read,provider-consents:read"}
     headers = {"Authorization": f"Bearer {_fetch_user_grant_token()}"}
     response = requests.post(url, data=data, headers=headers)
+    _debug(response)
     return response.json()["code"]
 
 
@@ -90,20 +105,23 @@ def _fetch_user_access_token(username):
         "code": _fetch_user_auth_token(username),
     }
     response = requests.post(url, data=data)
+    _debug(response)
     return response.json()["access_token"]
 
 
 def fetch_user_accounts(username):
     """Fetches the list of user accounts from the Tink API."""
-    url = "https://api.tink.com/api/v1/accounts/list"
+    url = "https://api.tink.com/data/v2/accounts"
     headers = {"Authorization": f"Bearer {_fetch_user_access_token(username)}"}
     response = requests.get(url, headers=headers)
-    return response.json()
+    _debug(response)
+    return json.dumps(response.json(), indent=2)
 
 
 def fetch_user_transactions(username):
     """Fetches the list of user transactions from the Tink API."""
-    url = "https://api.tink.com/api/v2/transactions"
+    url = "https://api.tink.com/data/v2/transactions"
     headers = {"Authorization": f"Bearer {_fetch_user_access_token(username)}"}
     response = requests.get(url, headers=headers)
-    return response.json()
+    _debug(response)
+    return json.dumps(response.json(), indent=2)
