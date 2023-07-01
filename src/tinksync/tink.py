@@ -12,7 +12,8 @@ TINK_CLIENT_ID = os.environ.get('TINK_CLIENT_ID')
 TINK_CLIENT_SECRET = os.environ.get('TINK_CLIENT_SECRET')
 
 
-def _fetch_user_create_token():   # 1.1
+def _fetch_user_create_token():
+    """Step 1.1 in the Tink documentation."""
     url = 'https://api.tink.com/api/v1/oauth/token'
     data = {
         'client_id': TINK_CLIENT_ID,
@@ -24,7 +25,12 @@ def _fetch_user_create_token():   # 1.1
     return response.json()['access_token']
 
 
-def create_user(username):  # 1.2
+def create_user(username):
+    """Step 1.2 in the Tink documentation.
+    
+    This function creates a Tink user with the given username.
+    The API returns the Tink user ID, but this is not needed, as Tink will
+    also accept the username as an identifier."""
     url = 'https://api.tink.com/api/v1/user/create'
     data = {
         'external_user_id': username,
@@ -38,7 +44,8 @@ def create_user(username):  # 1.2
     response = requests.post(url, data=json.dumps(data), headers=headers)
     return response.json()
 
-def _fetch_user_grant_token():  # 2.1
+def _fetch_user_grant_token():
+    """Step 2.1 in the Tink documentation."""
     url = 'https://api.tink.com/api/v1/oauth/token'
     data = {
         'client_id': TINK_CLIENT_ID,
@@ -49,7 +56,8 @@ def _fetch_user_grant_token():  # 2.1
     response = requests.post(url, data=data)
     return response.json()['access_token']
 
-def _fetch_authorization_code(username):  # 2.2
+def _fetch_authorization_code(username):
+    """Step 2.2 in the Tink documentation."""
     url = 'https://api.tink.com/api/v1/oauth/authorization-grant/delegate'
     data = {
         'external_user_id': username,
@@ -63,12 +71,18 @@ def _fetch_authorization_code(username):  # 2.2
     response = requests.post(url, data=data, headers=headers)
     return response.json()['code']
 
-def make_connect_bank_url(username):  # 3
+def make_connect_bank_url(username):
+    """Step 3 in the Tink documentation.
+    
+    This function returns a URL that the user should be redirected to.
+    The user credentials will then be associated with the Tink user.
+    """
     authorization_code = _fetch_authorization_code(username)
     url = f'https://link.tink.com/1.0/transactions/connect-accounts?client_id={TINK_CLIENT_ID}&redirect_uri=https://console.tink.com/callback&authorization_code={authorization_code}&market=GB&locale=en_US'
     return url
 
-def _fetch_user_auth_token(username):  # 4.1
+def _fetch_user_auth_token(username):
+    """Step 4.1 in the Tink documentation."""
     url = 'https://api.tink.com/api/v1/oauth/authorization-grant'
     data = {
         'external_user_id': username,
@@ -80,7 +94,8 @@ def _fetch_user_auth_token(username):  # 4.1
     response = requests.post(url, data=data, headers=headers)
     return response.json()['code']
 
-def _fetch_user_access_token(username):  # 4.2
+def _fetch_user_access_token(username):
+    """Step 4.2 in the Tink documentation."""
     url = 'https://api.tink.com/api/v1/oauth/token'
     data = {
         'client_id': TINK_CLIENT_ID,
@@ -92,6 +107,7 @@ def _fetch_user_access_token(username):  # 4.2
     return response.json()['access_token']
 
 def fetch_user_accounts(username):
+    """Fetches the list of user accounts from the Tink API."""
     url = 'https://api.tink.com/api/v1/accounts/list'
     headers = {
         'Authorization': f'Bearer {_fetch_user_access_token(username)}'
@@ -100,6 +116,7 @@ def fetch_user_accounts(username):
     return response.json()
 
 def fetch_user_transactions(username):
+    """Fetches the list of user transactions from the Tink API."""
     url = 'https://api.tink.com/api/v2/transactions'
     headers = {
         'Authorization': f'Bearer {_fetch_user_access_token(username)}'
