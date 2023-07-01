@@ -1,3 +1,9 @@
+"""API requests for setting up the Tink continuous transactions product.
+
+This module implements the requests described in this document:
+https://docs.tink.com/resources/transactions/continuous-connect-to-a-bank-account
+"""
+
 import os, requests, json
 
 TINK_CLIENT_ID = os.environ.get('TINK_CLIENT_ID')
@@ -83,7 +89,7 @@ def _fetch_user_access_token(username):  # 4.2
     response = requests.post(url, data=data)
     return response.json()['access_token']
 
-def fetch_user_accounts(username):  # 5
+def fetch_user_accounts(username):
     url = 'https://api.tink.com/api/v1/accounts/list'
     headers = {
         'Authorization': f'Bearer {_fetch_user_access_token(username)}'
@@ -97,5 +103,4 @@ def fetch_user_transactions(username):
         'Authorization': f'Bearer {_fetch_user_access_token(username)}'
     }
     response = requests.get(url, headers=headers)
-    print(response)
     return response.json()
