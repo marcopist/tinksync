@@ -56,9 +56,25 @@ Run the following command to see all the accounts you have successfully conntect
 python -m tinksync.cli --accounts
 ```
 
+```
+Example:
+>> Monzo > 1234.56 GBP > OK
+>> Amex Gold - 1001 > -200.00 GBP > OK
+>> Revolut GBP > 32.10 GBP > OK
+```
+
+
 If you don't see one or a few, no worries. Just wait a few mins and retry, the connection might take a few minutes to be fully established. 
 
 To see your latest transactions (across all your accounts) run:
 ```
 python -m tinksync.cli --transactions
+```
+
+```
+Example:
+>> Japan Centre Ceramics Sushi > 2023-07-01 > -12.75 GBP 
+>> TfL Travel Charge > 2023-07-01 > -8.1 GBP 
+>> Mm Re Cl Cos Grl > 2023-06-30 > -27.3 GBP 
+>> Mm Re Cl Cos Grl > 2023-06-30 > -5.8 GBP
 ```
