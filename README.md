@@ -36,12 +36,12 @@ TINK_CLIENT_SECRET=yourtinksecret
 First of all, create a user in your Tink app:
 
 ```
-python -m tinksync.cli --create
+tinksync --create
 ```
 
 Then, start connecting your banks.
 ```
-python -m tinksync.cli --connect
+tinksync --connect
 ```
 
 This will produce a link as an output. Follow it, and follow the instructions to connect your first bank.
@@ -50,10 +50,10 @@ Have more banks? That's perfect, that's why Tink (and this app) are made for you
 
 ### Check your integration
 
-Run the following command to see all the accounts you have successfully conntected.
+Run the following command to see all the accounts you have successfully connected.
 
 ```
-python -m tinksync.cli --accounts
+tinksync --accounts
 ```
 
 ```
