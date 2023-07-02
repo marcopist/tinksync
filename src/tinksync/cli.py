@@ -27,7 +27,8 @@ def _format_transactions(data):
         date = transaction["dates"]['booked']
         print(f">> {description} > {date} > {amount} {currency} ")
 
-if __name__ == "__main__":
+
+def _main():
     import argparse, os
 
     # Exmaple usage:
