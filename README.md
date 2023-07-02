@@ -68,7 +68,7 @@ If you don't see one or a few, no worries. Just wait a few mins and retry, the c
 
 To see your latest transactions (across all your accounts) run:
 ```
-python -m tinksync.cli --transactions
+tinksync --transactions
 ```
 
 ```
