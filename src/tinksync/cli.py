@@ -1,3 +1,5 @@
+#!usr/bin/env python
+
 """This module contains a CLI which can be used to create a Tink user, generate a bank connection URL, and fetch the accounts."""
 from dotenv import load_dotenv
 

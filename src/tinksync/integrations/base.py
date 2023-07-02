@@ -6,6 +6,9 @@ class Integration:
     def __init__(self, username):
         self.username = username
 
+    def is_applicable(self):
+        return self.get_credentials()
+
     def get_credentials(self):
         pass
 

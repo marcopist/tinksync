@@ -7,4 +7,4 @@ class GSheetsIntegration(Integration):
         self.credentials = self.get_credentials()
 
     def get_credentials(self):
-        self.
+        pass
