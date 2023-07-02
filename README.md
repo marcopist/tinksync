@@ -20,7 +20,7 @@ Quite straightforward. Here's the link [link](https://console.tink.com/signup) f
 Navigate to the Tink console. Create a new production app and give it an exciting name, like `personal-budget`. Select the app type to be `production`. These scripts and API integrations were tested in the sandbox first for you 😘.
 
 ### Create an account secret
-Go to `App Settings` > `Create new client secret`. You should see a long string. Store this info as described below. 
+Go to `App Settings` > `Create new client secret`. You should see a long string.
 
 ### Store this info
 
@@ -46,7 +46,7 @@ tinksync --connect
 
 This will produce a link as an output. Follow it, and follow the instructions to connect your first bank.
 
-Have more banks? That's perfect, that's why Tink (and this app) are made for you. Just re-run `python -m tinksync.cli --connect` and follow the instructions again to connect to another bank. (Do not reuse the same link as the first time). Repeat the operation as many times as you need to connect to all your bank accounts. Easy peasy :)
+Have more banks? That's perfect, that's why Tink (and this app) were made. Just re-run `tinksync --connect` and follow the instructions again to connect to another bank. (Do not reuse the same link as the first time). Repeat the operation as many times as you need to connect to all your bank accounts. Easy peasy 🙃.
 
 ### Check your integration
 
