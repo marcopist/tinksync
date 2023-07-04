@@ -60,11 +60,11 @@ tinksync --accounts
 Example:
 >> Monzo > 1234.56 GBP > OK
 >> Amex Gold - 1001 > -200.00 GBP > OK
->> Revolut GBP > 32.10 GBP > OK
+>> Revolut EUR > 32.10 EUR > OK
 ```
 
 
-If you don't see one or a few, no worries. Just wait a few mins and retry, the connection might take a few minutes to be fully established. 
+If you don't see one or a few, no worries. Just wait a few mins and retry running `tinksync --accounts`, the connection might take a few minutes to be fully established. 
 
 To see your latest transactions (across all your accounts) run:
 ```

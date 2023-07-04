@@ -6,21 +6,11 @@ https://docs.tink.com/resources/transactions/continuous-connect-to-a-bank-accoun
 scripts/cli.py is a CLI making use of these functions.
 """
 
-import os, requests, json, curlify
+import os, requests, json
+from tinksync._utils import _debug
 
 TINK_CLIENT_ID = os.environ.get("TINK_CLIENT_ID")
 TINK_CLIENT_SECRET = os.environ.get("TINK_CLIENT_SECRET")
-
-
-def _debug(response):
-    """Prints the request and response for debugging purposes."""
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-    print("--- Sent request ---")
-    print(curlify.to_curl(response.request))
-
-    print("--- Received response ---")
-    print(response.json())
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 
 
 def _fetch_user_create_token(debug=False):

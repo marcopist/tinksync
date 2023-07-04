@@ -1,10 +1,7 @@
 import os
 from tinksync.integrations.base import Integration
 
-class GSheetsIntegration(Integration):
-    def __init__(self, username):
-        super().__init__(username)
-        self.credentials = self.get_credentials()
 
+class GSheetsIntegration(Integration):
     def get_credentials(self):
         pass

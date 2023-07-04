@@ -8,6 +8,7 @@ load_dotenv()
 from tinksync.tink import create_user, make_connect_bank_url, fetch_user_accounts, fetch_user_accounts, fetch_user_transactions
 from pprint import pprint
 
+
 def _format_accounts(data):
     accounts = data["accounts"]
     for account in accounts:
@@ -17,19 +18,20 @@ def _format_accounts(data):
         currency = account["balances"]["booked"]["amount"]["currencyCode"]
         print(f">> {name} > {balance} {currency} > OK")
 
+
 def _format_transactions(data):
     transactions = data["transactions"]
     for transaction in transactions:
         amount_val = transaction["amount"]["value"]
         amount = float(amount_val["unscaledValue"]) / 10 ** int(amount_val["scale"])
         currency = transaction["amount"]["currencyCode"]
-        description = transaction["descriptions"]['display']
-        date = transaction["dates"]['booked']
+        description = transaction["descriptions"]["display"]
+        date = transaction["dates"]["booked"]
         print(f">> {description} > {date} > {amount} {currency} ")
 
 
 def _main():
-    import argparse, os
+    import argparse, os, json
 
     # Exmaple usage:
     # python -m tinksync.cli --username <username> --create -> Will create a Tink user
@@ -56,4 +58,5 @@ def _main():
     elif args.accounts:
         _format_accounts(fetch_user_accounts(username, debug=debug_mode))
     elif args.transactions:
-        _format_transactions(fetch_user_transactions(username, debug=debug_mode))
+
+        print(json.dumps((fetch_user_transactions(username, debug=debug_mode)), indent=4))
