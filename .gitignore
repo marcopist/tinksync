@@ -2,6 +2,7 @@
 accounts.py
 scripts/config.py
 secrets/**
+develop
 
 *.py[cod]
 __pycache__

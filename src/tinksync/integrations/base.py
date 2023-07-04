@@ -25,8 +25,22 @@ class Integration(ABC):
     def _publish_transactions(self, transactions):
         pass
 
-    def reconciliate(self, source_transactions):
+    def _format_source_transactions(self, source_transactions):
+        return {
+            transaction["id"]: {
+                "Amount": float(transaction["amount"]['value']['unscaledValue']) / 10**float(transaction["amount"]['value']['scale']),
+                "Merchant": transaction["descriptions"]['display'],
+                "Date": transaction["dates"]['booked'],
+                "Key": transaction["id"],
+                "Account" : transaction["accountId"]
+            }
+            for transaction in source_transactions['transactions']
+        }
+
+    def reconciliate(self, source_transactions_raw):
         target_transactions = self._get_target_transactions()
+        source_transactions = self._format_source_transactions(source_transactions_raw)
         missing_transaction_keys = set(source_transactions.keys()) - set(target_transactions.keys())  # type: ignore
         missing_transactions = {key : source_transactions[key] for key in missing_transaction_keys}
+        self._publish_transactions(missing_transactions)
 

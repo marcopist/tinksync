@@ -1,8 +1,6 @@
 import os, requests
 from tinksync._utils import _debug
-
 from tinksync.integrations.base import Integration
-from pprint import pprint
 
 class CodaIntegration(Integration):
     def _get_credentials(self):
@@ -50,8 +48,7 @@ class CodaIntegration(Integration):
         colums_url = f"https://coda.io/apis/v1/docs/{docid}/tables/{tableid}/columns"
         colums_res = requests.get(colums_url, headers=headers)
         cols_mapping = {col['name'] : col['id'] for col in colums_res.json()["items"]}
-
-        mapped_transactions = {
+        payload = {
             'rows': [
                 {
                     'cells': [
@@ -62,18 +59,20 @@ class CodaIntegration(Integration):
                         for k, v in single_transaction.items()
                     ]
                 }
-            ] for single_transaction in transactions.values()
+            for single_transaction in transactions.values()
+            ]
         }
 
-        print(mapped_transactions)
-
-
-
-
-
+        rows_url = f"https://coda.io/apis/v1/docs/{docid}/tables/{tableid}/rows"
+        rows_res = requests.post(rows_url, headers=headers, json=payload)
+        _debug(rows_res)
 
 
 if __name__ == "__main__":
+    from pprint import pprint
+    from tinksync.tink import fetch_user_transactions
+    print("Started fetching Tink transactions")
+    source_transactions = fetch_user_transactions("marcopist")
+    print("Finished fetching tink transactions")
     coda = CodaIntegration("test")
-    current = coda._get_target_transactions()
-    pprint(coda._publish_transactions(current))
+    pprint(coda.reconciliate(source_transactions))
