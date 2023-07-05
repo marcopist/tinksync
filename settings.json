@@ -1,0 +1,17 @@
+{
+    "tinkClientId" : "YOUR-CLIENT-ID",
+    "tinkClientSecret" : "YOUR-CLIENT-SECRET",
+    "tinkAccounts" : {
+        "username1" : { // This is the username of the Tink User
+            "integrations" : [
+                {
+                    "codaIntegration" : { // All these fields are compulsory
+                        "codaDocId" : "YOUR-CODA-DOC-ID",
+                        "codaApiKey": "YOUR-CODA-API-KEY",
+                        "codaTableId": "YOUR-CODA-TABLE-ID",
+                    }
+                }
+            ]
+        }
+    }
+}
