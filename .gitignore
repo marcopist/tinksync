@@ -1,7 +1,6 @@
 # Super private secret information
-accounts.py
-scripts/config.py
-secrets/**
+settings.json
+.env
 develop
 
 *.py[cod]
