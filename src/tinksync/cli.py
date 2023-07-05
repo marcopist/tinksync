@@ -16,7 +16,8 @@ def _format_accounts(data):
         balance_val = account["balances"]["booked"]["amount"]["value"]
         balance = float(balance_val["unscaledValue"]) / 10 ** int(balance_val["scale"])
         currency = account["balances"]["booked"]["amount"]["currencyCode"]
-        print(f">> {name} > {balance} {currency} > OK")
+        account_id = account["id"]
+        print(f">> {account_id} > {name} > {balance} {currency} > OK")
 
 
 def _format_transactions(data):
