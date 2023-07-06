@@ -6,18 +6,26 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from tinksync.tink import create_user, make_connect_bank_url, fetch_user_accounts, fetch_user_accounts, fetch_user_transactions
+from tinksync.config import get_settings, set_settings
 from pprint import pprint
 
 
-def _format_accounts(data):
+def _format_accounts(data, username):
     accounts = data["accounts"]
     for account in accounts:
-        name = account["name"]
+        account_id = account["id"]
+
+        if account_id not in get_settings()["tinkUsers"][username]["accountNicknames"]:
+            new_settings = get_settings()
+            new_settings["tinkUsers"][username]["accountNicknames"]["account_id"] = account["name"]
+            set_settings(new_settings)
+
+        nickname = get_settings()["tinkUsers"][username]["accountNicknames"][account_id]
+
         balance_val = account["balances"]["booked"]["amount"]["value"]
         balance = float(balance_val["unscaledValue"]) / 10 ** int(balance_val["scale"])
         currency = account["balances"]["booked"]["amount"]["currencyCode"]
-        account_id = account["id"]
-        print(f">> {account_id} > {name} > {balance} {currency} > OK")
+        print(f">> {account_id} > {nickname} > {balance} {currency} > OK")
 
 
 def _format_transactions(data):
@@ -57,7 +65,7 @@ def _main():
     elif args.connect:
         print(make_connect_bank_url(username, debug=debug_mode))
     elif args.accounts:
-        _format_accounts(fetch_user_accounts(username, debug=debug_mode))
+        _format_accounts(fetch_user_accounts(username, debug=debug_mode), username)
     elif args.transactions:
 
         print(json.dumps((fetch_user_transactions(username, debug=debug_mode)), indent=4))

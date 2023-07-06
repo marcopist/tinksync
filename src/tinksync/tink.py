@@ -8,9 +8,10 @@ scripts/cli.py is a CLI making use of these functions.
 
 import os, requests, json
 from tinksync._utils import _debug
+from tinksync.config import get_settings
 
-TINK_CLIENT_ID = os.environ.get("TINK_CLIENT_ID")
-TINK_CLIENT_SECRET = os.environ.get("TINK_CLIENT_SECRET")
+TINK_CLIENT_ID = get_settings()["tinkClientId"]
+TINK_CLIENT_SECRET = get_settings()["tinkClientSecret"]
 
 
 def _fetch_user_create_token(debug=False):
