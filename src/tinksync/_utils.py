@@ -1,12 +1,14 @@
 import curlify, json
+from tinksync.config import DEBUG_MODE
 
 
 def _debug(response):
     """Prints the request and response for debugging purposes."""
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-    print("--- Sent request ---")
-    print(curlify.to_curl(response.request))
+    if DEBUG_MODE:
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print("--- Sent request ---")
+        print(curlify.to_curl(response.request))
 
-    print("--- Received response ---")
-    print(json.dumps(response.json(), indent=2))
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        print("--- Received response ---")
+        print(json.dumps(response.json(), indent=2))
+        print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")

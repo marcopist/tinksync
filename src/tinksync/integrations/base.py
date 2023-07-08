@@ -4,15 +4,12 @@ from tinksync.config import get_settings
 
 
 class Integration(ABC):
-    def __init__(self, username):
+    def __init__(self, username, config):
         self.username = username
-        self.credentials = self._get_credentials()
-
-    def is_applicable(self):
-        return self.credentials is not None
+        self.is_applicable = self._set_credentials(config)
 
     @abstractmethod
-    def _get_credentials(self):
+    def _set_credentials(self, config):
         pass
 
     @abstractmethod

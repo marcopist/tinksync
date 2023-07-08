@@ -66,7 +66,8 @@ setup(
         "requests",
         "gspread",
         "python-dotenv",
-        "curlify"
+        "curlify",
+        "pymongo"
     ],
     extras_require={
         # eg:
