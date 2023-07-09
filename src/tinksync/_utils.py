@@ -1,5 +1,5 @@
-import curlify, json
-from tinksync.config import DEBUG_MODE
+import curlify, json, os
+DEBUG_MODE = os.environ.get("DEBUG_MODE") == "1"
 
 
 def _debug(response):

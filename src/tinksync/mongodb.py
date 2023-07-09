@@ -7,7 +7,7 @@ mongoClient = MongoClient(MONGO_CONNECTION_STRING, server_api=ServerApi('1'))
 usersCollection = mongoClient['tinksync']['users']
 
 def get_user_settings(username):
-    document = next(usersCollection.find({"username": username}))
+    document = usersCollection.find_one({"username": username})
     return document
 
 def replace_user_settings(record):

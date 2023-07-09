@@ -5,7 +5,6 @@ from tinksync import integrations
 
 app = Flask(__name__)
 
-
 @app.route("/reconciliate")
 def reconciliate():
     return "OK"
