@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from tinksync.tink import fetch_user_transactions
-from tinksync.config import get_settings
-
+from tinksync.mongodb import get_user_settings
 
 class Integration(ABC):
     def __init__(self, username, config):
@@ -30,7 +29,7 @@ class Integration(ABC):
                 "Merchant": transaction["descriptions"]["display"],
                 "Date": transaction["dates"]["booked"],
                 "Key": transaction["id"],
-                "Account": get_settings()["tinkUsers"][self.username]["accountNicknames"][transaction["accountId"]],
+                "Account": get_user_settings(self.username)["accountNicknames"][transaction["accountId"]], # type: ignore
             }
             for transaction in source_transactions["transactions"]
         }

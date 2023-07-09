@@ -1,7 +1,7 @@
 import os, requests
 from tinksync._utils import _debug
 from tinksync.integrations.base import Integration
-from tinksync.config import get_settings
+#from tinksync.mongodb import get_user_settings, replace_user_settings, insert_user_settings
 
 
 class CodaIntegration(Integration):

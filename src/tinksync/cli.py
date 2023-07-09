@@ -4,69 +4,13 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from tinksync.tink import create_user, make_connect_bank_url, fetch_user_accounts, fetch_user_accounts, fetch_user_transactions
-from tinksync.mongodb import get_user_settings, replace_user_settings, insert_user_settings
 
-def _cli_create(username):
-    if get_user_settings(username):
-        print("User already exists!")
-        return
-    
-    create_user(username)
-    new_record = {
-        "username" : username
-    }
-    insert_user_settings(new_record)
-    print("User created.")
-
-
-def _cli_get_accounts(username):
-    user_settings = get_user_settings(username)
-    if not user_settings:
-        print("User does not exist!")
-        return
-    accounts = fetch_user_accounts(username)["accounts"]
-    nicknames = user_settings["accountNicknames"]
-    for account in accounts:
-        nickname = nicknames.get(account["id"],  account["name"])
-        balance_val = account["balances"]["booked"]["amount"]["value"]
-        balance = float(balance_val["unscaledValue"]) / 10 ** int(balance_val["scale"])
-        currency = account["balances"]["booked"]["amount"]["currencyCode"]
-        print(f">> {account['id']} > {nickname} > {balance} {currency} > OK")
-
-def _cli_set_account_nickname(username, account_id, nickname):
-    user_settings = get_user_settings(username)
-    if not user_settings:
-        print("User does not exist!")
-        return
-
-    user_settings["accountNicknames"][account_id] = nickname
-    replace_user_settings(user_settings)
-
-def _cli_set_integration(username, integration_name, integration_settings):
-    user_settings = get_user_settings(username)
-    if not user_settings:
-        print("User does not exist!")
-        return
-
-    user_settings['integrations'][integration_name] = integration_settings
-
-def _cli_get_transactions(username):
-    user_settings = get_user_settings(username)
-    if not user_settings:
-        print("User does not exist!")
-        return
-    transactions = fetch_user_transactions(username)["transactions"]
-    for transaction in transactions:
-        amount_val = transaction["amount"]["value"]
-        amount = float(amount_val["unscaledValue"]) / 10 ** int(amount_val["scale"])
-        currency = transaction["amount"]["currencyCode"]
-        description = transaction["descriptions"]["display"]
-        date = transaction["dates"]["booked"]
-        print(f">> {description} > {date} > {amount} {currency} ")
 
 def _main():
+    """This function is the entrypoint of the CLI."""
     import argparse, os, json
+    from tinksync.main import cli_create, cli_get_accounts, cli_get_transactions, cli_set_account_nickname
+    from tinksync.tink import make_connect_bank_url
 
     # Exmaple usage:
     # tinksync --username <username> --create -> Will create a Tink user
@@ -89,14 +33,14 @@ def _main():
     username = args.username or os.environ.get("TINK_DEFAULT_USERNAME") or "myself"
 
     if args.create:
-        _cli_create(username)
+        cli_create(username)
     elif args.connect:
         print(make_connect_bank_url(username))
     elif args.accounts:
-        _cli_get_accounts(username)
+        cli_get_accounts(username)
     elif args.transactions:
-        _cli_get_transactions(username)
+        cli_get_transactions(username)
     elif args.nickname:
         account_id = args.nickname[0]
         nickname = args.nickname[1]
-        _cli_set_account_nickname(username, account_id, nickname)
+        cli_set_account_nickname(username, account_id, nickname)
