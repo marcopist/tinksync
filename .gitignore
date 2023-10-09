@@ -2,6 +2,7 @@
 settings.json
 .env
 develop
+secrets
 
 *.py[cod]
 __pycache__

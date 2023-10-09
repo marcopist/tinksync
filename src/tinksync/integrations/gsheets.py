@@ -3,5 +3,5 @@ from tinksync.integrations.base import Integration
 
 
 class GSheetsIntegration(Integration):
-    def get_credentials(self):
+    def _set_credentials(self):
         pass
