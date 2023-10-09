@@ -1,1 +1,3 @@
 from tinksync.integrations.coda import CodaIntegration
+from tinksync.integrations.gsheets import GSheetsIntegration
+from tinksync.integrations.notion import NotionIntegration

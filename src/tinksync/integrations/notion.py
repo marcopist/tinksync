@@ -3,26 +3,28 @@ from tinksync._utils import _debug
 from tinksync.integrations.base import Integration
 
 
-class NotionIntegration(Integration):
-    def _set_credentials(self, config):
-        self._NOTION_SECRET = config.get("notionSecret")
-        self._NOTION_DATABASE_ID = config.get("notionDatabaseId")
+class NotionIntegration():
+    pass
+    # def _set_credentials(self, config):
+    #     self._NOTION_SECRET = config.get("notionSecret")
+    #     self._NOTION_DATABASE_ID = config.get("notionDatabaseId")
 
-        return self._NOTION_SECRET and self._NOTION_DATABASE_ID
+    #     return self._NOTION_SECRET and self._NOTION_DATABASE_ID
 
-    def _get_target_transactions(self):
-        url = f"https://api.notion.com/v1/databases/{self._NOTION_DATABASE_ID}/query"
-        headers = {
-            "Authorization": f"Bearer {self._NOTION_SECRET}",
-            "Notion-Version": "2022-06-28",
-        }
-        res = requests.post(url, headers=headers)
-        _debug(res)
-        results = res.json()["results"]
-        return {result["properties"]["Name"]["title"][0]["text"]["content"]: result["properties"] for result in results}
+    # def _get_target_transactions(self):
+    #     return
+    #     url = f"https://api.notion.com/v1/databases/{self._NOTION_DATABASE_ID}/query"
+    #     headers = {
+    #         "Authorization": f"Bearer {self._NOTION_SECRET}",
+    #         "Notion-Version": "2022-06-28",
+    #     }
+    #     res = requests.post(url, headers=headers)
+    #     _debug(res)
+    #     results = res.json()["results"]
+    #     return {result["properties"]["Name"]["title"][0]["text"]["content"]: result["properties"] for result in results}
     
-    def _publish_transactions(self, transactions):
-        pass
+    # def _publish_transactions(self, transactions):
+    #     pass
 
 
 if __name__ == "__main__":

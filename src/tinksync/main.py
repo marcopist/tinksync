@@ -2,7 +2,7 @@ from tinksync.tink import create_user, make_connect_bank_url, fetch_user_account
 from tinksync.mongodb import get_user_settings, replace_user_settings, insert_user_settings
 from tinksync import integrations
 
-def sync(username):
+def cli_sync(username):
     user_settings = get_user_settings(username)
     if not user_settings:
         print("User does not exist!")
